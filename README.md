@@ -10,6 +10,19 @@ On Red Hat Enterprise Linux compatible distributions, Red Hat Enterprise Linux 8
 Red Hat Enterprise Linux users need to enable CodeReady Linux Builder repository before installing Claident.
 CentOS users need to enable PowerTools repository before installing Claident.
 
+On macOS, macOS 10.14 Mojave or later is required.
+Mac users need to install Xcode command line tools before installing Claident.
+Xcode command line tools can install by running the following command in the terminal.
+
+```
+xcode-select --install
+```
+
+In addition, mac users also need to install 1 of the following package manager.
+
+- [MacPorts](https://www.macports.org/install.php)
+- [Homebrew](https://brew.sh/)
+
 ## How to use
 
 ```
