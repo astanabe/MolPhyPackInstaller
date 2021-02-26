@@ -1,11 +1,12 @@
-sudo yum install gcc gcc-c++ make wget tar gzip xz unzip coreutils perl ca-certificates ncurses ncurses-devel readline readline-devel mpich mpich-devel openmpi openmpi-devel java-1.8.0-openjdk || exit $?
+sudo yum install gcc gcc-c++ make wget tar gzip bzip2 xz unzip coreutils perl ca-certificates ncurses ncurses-devel readline readline-devel openmpi openmpi-devel java-1.8.0-openjdk || exit $?
+export PATH=$PATH:/usr/lib64/openmpi/bin
 if test -z $PREFIX; then
 export PREFIX=/usr/local || exit $?
 fi
 # download, and install Perl modules
 if ! test -e .perlmodules; then
 wget -c https://www.fifthdimension.jp/products/molphypack/perlmodules.tar.bz2 || exit $?
-site=`perl -e 'foreach(@INC){if(/site_perl$/){print("$_\n");exit}}'`
+site=`perl -e 'foreach(@INC){if(/share\/perl5$/){print("$_\n");exit}}'`
 sudo mkdir -p $site || exit $?
 sudo tar -C $site -xjf perlmodules.tar.bz2 || exit $?
 rm perlmodules.tar.bz2 || exit $?
@@ -236,3 +237,4 @@ rm -rf Phylogears-2.0.2020.05.06.zip Phylogears-2.0.2020.05.06 || exit $?
 touch .phylogears2 || exit $?
 fi
 echo 'Installation finished correctly!'
+echo "You might need to add \"$PREFIX\" to PATH environment variable."

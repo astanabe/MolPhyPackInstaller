@@ -1,4 +1,4 @@
-sudo apt-get install gcc g++ make wget tar gzip xz-utils unzip coreutils perl ca-certificates libncurses-dev libreadline-dev mpi-default-bin mpi-default-dev openjdk-8-jre emboss || exit $?
+sudo apt-get install gcc g++ make wget tar gzip bzip2 xz-utils unzip coreutils perl ca-certificates libncurses-dev libreadline-dev mpi-default-bin mpi-default-dev openjdk-8-jre || exit $?
 if test -z $PREFIX; then
 export PREFIX=/usr/local || exit $?
 fi
@@ -236,3 +236,4 @@ rm -rf Phylogears-2.0.2020.05.06.zip Phylogears-2.0.2020.05.06 || exit $?
 touch .phylogears2 || exit $?
 fi
 echo 'Installation finished correctly!'
+echo "You might need to add \"$PREFIX\" to PATH environment variable."
