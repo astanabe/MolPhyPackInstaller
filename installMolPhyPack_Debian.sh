@@ -2,13 +2,9 @@ sudo apt-get install gcc g++ make wget tar gzip bzip2 xz-utils unzip coreutils p
 if test -z $PREFIX; then
 export PREFIX=/usr/local || exit $?
 fi
-# download, and install Perl modules
+# download , compile, and install Perl modules
 if ! test -e .perlmodules; then
-wget -c https://www.fifthdimension.jp/products/molphypack/perlmodules.tar.bz2 || exit $?
-site=`perl -e 'foreach(@INC){if(/site_perl$/){print("$_\n");exit}}'`
-sudo mkdir -p $site || exit $?
-sudo tar -C $site -xjf perlmodules.tar.bz2 || exit $?
-rm perlmodules.tar.bz2 || exit $?
+sudo -HE sh -c "yes '' | cpan -fi Statistics::Distributions Statistics::ChisqIndep Math::Random::MT" || exit $?
 touch .perlmodules || exit $?
 fi
 # download, compile, and install EMBOSS
