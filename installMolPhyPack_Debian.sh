@@ -1,6 +1,15 @@
-sudo apt-get install gcc g++ make wget tar gzip bzip2 xz-utils unzip coreutils perl ca-certificates libncurses-dev libreadline-dev mpi-default-bin mpi-default-dev openjdk-8-jre || exit $?
+sudo apt-get install gcc g++ make wget tar gzip bzip2 xz-utils unzip coreutils perl ca-certificates libncurses-dev libreadline-dev mpi-default-bin mpi-default-dev || exit $?
 if test -z $PREFIX; then
 export PREFIX=/usr/local || exit $?
+fi
+# download and install JRE8
+if ! test -e .java; then
+wget -c https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u282-b08/OpenJDK8U-jre_x64_linux_hotspot_8u282b08.tar.gz || exit $?
+tar -xzf OpenJDK8U-jre_x64_linux_hotspot_8u282b08.tar.gz || exit $?
+mkdir -p $PREFIX/share/molphypack || sudo mkdir -p $PREFIX/share/molphypack || exit $?
+mv jdk8u282-b08-jre/* $PREFIX/share/molphypack/ || sudo mv jdk8u282-b08-jre/* $PREFIX/share/molphypack/ || exit $?
+rm -rf jdk8u282-b08-jre OpenJDK8U-jre_x64_linux_hotspot_8u282b08.tar.gz || exit $?
+touch .java || exit $?
 fi
 # download , compile, and install Perl modules
 if ! test -e .perlmodules; then
@@ -53,7 +62,7 @@ wget -c -O readseq.jar https://sourceforge.net/projects/readseq/files/readseq/2.
 mkdir -p $PREFIX/bin || sudo mkdir -p $PREFIX/bin || exit $?
 mv readseq.jar $PREFIX/bin/ || sudo mv readseq.jar $PREFIX/bin/ || exit $?
 echo '#!/bin/sh' > readseq || exit $?
-echo "java -Xms64m -Xmx8192m -jar $PREFIX/bin/readseq.jar \$*" >> readseq || exit $?
+echo "$PREFIX/share/molphypack/bin/java -Xms64m -Xmx8192m -jar $PREFIX/bin/readseq.jar \$*" >> readseq || exit $?
 chmod 755 readseq || exit $?
 mv readseq $PREFIX/bin/ || sudo mv readseq $PREFIX/bin/ || exit $?
 touch .readseq || exit $?
@@ -162,7 +171,7 @@ mkdir -p $PREFIX/share/figtree || sudo mkdir -p $PREFIX/share/figtree || exit $?
 mv figtree.jar $PREFIX/share/figtree/ || sudo mv figtree.jar $PREFIX/share/figtree/ || exit $?
 cd ../bin || exit $?
 echo '#!/bin/sh' > figtree || exit $?
-echo "java -Xms64m -Xmx8192m -jar $PREFIX/share/figtree/figtree.jar \$*" >> figtree || exit $?
+echo "$PREFIX/share/molphypack/bin/java -Xms64m -Xmx8192m -jar $PREFIX/share/figtree/figtree.jar \$*" >> figtree || exit $?
 chmod 755 figtree || exit $?
 mv figtree $PREFIX/bin/ || sudo mv figtree $PREFIX/bin/ || exit $?
 cd ../.. || exit $?
@@ -179,7 +188,7 @@ mv *.jar $PREFIX/share/tracer/ || sudo mv *.jar $PREFIX/share/tracer/ || exit $?
 cd ../bin || exit $?
 echo '#!/bin/sh' > tracer || exit $?
 echo "TRACER_LIB=$PREFIX/share/tracer" >> tracer || exit $?
-echo "java -Xms64m -Xmx8192m -jar $PREFIX/share/tracer/tracer.jar \$*" >> tracer || exit $?
+echo "$PREFIX/share/molphypack/bin/java -Xms64m -Xmx8192m -jar $PREFIX/share/tracer/tracer.jar \$*" >> tracer || exit $?
 chmod 755 tracer || exit $?
 mv tracer $PREFIX/bin/ || sudo mv tracer $PREFIX/bin/ || exit $?
 cd ../.. || exit $?
