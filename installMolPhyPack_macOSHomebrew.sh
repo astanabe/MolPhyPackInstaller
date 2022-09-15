@@ -4,11 +4,11 @@ export PREFIX=/usr/local || exit $?
 fi
 # download and install JRE8
 if ! test -e .java; then
-wget -c https://github.com/AdoptOpenJDK/openjdk8-binaries/releases/download/jdk8u282-b08/OpenJDK8U-jre_x64_mac_hotspot_8u282b08.tar.gz || exit $?
-tar -xzf OpenJDK8U-jre_x64_mac_hotspot_8u282b08.tar.gz || exit $?
+wget -c https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jre_x64_mac_hotspot_8u345b01.tar.gz || exit $?
+tar -xzf OpenJDK8U-jre_x64_mac_hotspot_8u345b01.tar.gz || exit $?
 mkdir -p $PREFIX/share/molphypack || exit $?
-mv jdk8u282-b08-jre/Contents/Home/* $PREFIX/share/molphypack/ || exit $?
-rm -rf jdk8u282-b08-jre OpenJDK8U-jre_x64_mac_hotspot_8u282b08.tar.gz || exit $?
+mv jdk8u345-b01-jre/Contents/Home/* $PREFIX/share/molphypack/ || exit $?
+rm -rf jdk8u345-b01-jre OpenJDK8U-jre_x64_mac_hotspot_8u345b01.tar.gz || exit $?
 touch .java || exit $?
 fi
 # download , compile, and install Perl modules
@@ -30,14 +30,14 @@ touch .emboss || exit $?
 fi
 # download, compile, and install MAFFT
 if ! test -e .mafft; then
-wget -c https://mafft.cbrc.jp/alignment/software/mafft-7.475-without-extensions-src.tgz || exit $?
-gtar -xzf mafft-7.475-without-extensions-src.tgz || exit $?
-cd mafft-7.475-without-extensions/core || exit $?
+wget -c https://mafft.cbrc.jp/alignment/software/mafft-7.505-without-extensions-src.tgz || exit $?
+gtar -xzf mafft-7.505-without-extensions-src.tgz || exit $?
+cd mafft-7.505-without-extensions/core || exit $?
 perl -i -npe 's/^CFLAGS *= */$& -mtune=native /' Makefile || exit $?
 gmake PREFIX=$PREFIX -j4 || exit $?
 gmake PREFIX=$PREFIX install || exit $?
 cd ../.. || exit $?
-rm -rf mafft-7.475-without-extensions mafft-7.475-without-extensions-src.tgz || exit $?
+rm -rf mafft-7.505-without-extensions mafft-7.505-without-extensions-src.tgz || exit $?
 touch .mafft || exit $?
 fi
 # download, compile, and install PHYLIP
@@ -68,21 +68,21 @@ touch .readseq || exit $?
 fi
 # download, compile, and install Primer3
 if ! test -e .primer3; then
-wget -c -O primer3-2.5.0.tar.gz https://github.com/primer3-org/primer3/archive/v2.5.0.tar.gz || exit $?
-gtar -xzf primer3-2.5.0.tar.gz || exit $?
-cd primer3-2.5.0/src || exit $?
+wget -c -O primer3-2.6.1.tar.gz https://github.com/primer3-org/primer3/archive/refs/tags/v2.6.1.tar.gz || exit $?
+gtar -xzf primer3-2.6.1.tar.gz || exit $?
+cd primer3-2.6.1/src || exit $?
 perl -i -npe 's/^O_OPTS *= */$& -mtune=native /' Makefile || exit $?
 gmake -j4 || exit $?
 mkdir -p $PREFIX/bin || exit $?
 mv long_seq_tm_test ntdpal ntthal oligotm primer3_core $PREFIX/bin/ || exit $?
 cd ../.. || exit $?
-rm -rf primer3-2.5.0.tar.gz primer3-2.5.0 || exit $?
+rm -rf primer3-2.6.1.tar.gz primer3-2.6.1 || exit $?
 touch .primer3 || exit $?
 fi
 # download, compile, and install RAxML
 if ! test -e .raxml; then
-wget -c -O RAxML-8.2.12.zip https://github.com/stamatak/standard-RAxML/archive/v8.2.12.zip || exit $?
-unzip -qq RAxML-8.2.12.zip || exit $?
+wget -c -O RAxML-8.2.12.tar.gz https://github.com/stamatak/standard-RAxML/archive/refs/tags/v8.2.12.tar.gz || exit $?
+gtar -xzf RAxML-8.2.12.tar.gz || exit $?
 cd standard-RAxML-8.2.12 || exit $?
 for f in Makefile.*; do perl -i -npe 's/^CFLAGS *= */$& -march=core2 /;s/ -march=native//' $f || exit $?; done
 perl -i -npe "s/-march=core2/-march=corei7-avx/" Makefile.AVX.gcc || exit $?
@@ -116,12 +116,12 @@ gmake -j4 -f Makefile.SSE3.PTHREADS.gcc || exit $?
 mv raxmlHPC-PTHREADS-SSE3 $PREFIX/bin/ || exit $?
 gmake -f Makefile.SSE3.PTHREADS.gcc clean || exit $?
 cd .. || exit $?
-rm -rf RAxML-8.2.12.zip standard-RAxML-8.2.12 || exit $?
+rm -rf RAxML-8.2.12.tar.gz standard-RAxML-8.2.12 || exit $?
 touch .raxml || exit $?
 fi
 # download, compile, and install trimAl
 if ! test -e .trimal; then
-wget -c -O trimal-1.4.1.tar.gz https://github.com/scapella/trimal/archive/v1.4.1.tar.gz || exit $?
+wget -c -O trimal-1.4.1.tar.gz https://github.com/inab/trimal/archive/refs/tags/v1.4.1.tar.gz || exit $?
 gtar -xzf trimal-1.4.1.tar.gz || exit $?
 cd trimal-1.4.1/source || exit $?
 perl -i -npe 's/^FLAGS *= */$&-O2 -mtune=native /' makefile || exit $?
@@ -147,9 +147,9 @@ touch .consel || exit $?
 fi
 # download, compile, and install MrBayes5D
 if ! test -e .mrbayes5d; then
-wget -c https://www.fifthdimension.jp/products/mrbayes5d/mrbayes5d-3.2.6.2016.11.02.zip || exit $?
-unzip -qq mrbayes5d-3.2.6.2016.11.02.zip || exit $?
-cd mrbayes5d-3.2.6.2016.11.02/src || exit $?
+wget -c https://www.fifthdimension.jp/products/mrbayes5d/mrbayes5d-3.2.6.2016.11.11.zip || exit $?
+unzip -qq mrbayes5d-3.2.6.2016.11.11.zip || exit $?
+cd mrbayes5d-3.2.6.2016.11.11 || exit $?
 sh ./configure --enable-debug=no --enable-mpi=no --enable-sse=yes --enable-threads=no --without-beagle --prefix=$PREFIX || exit $?
 gmake -j4 || exit $?
 gmake install || exit $?
@@ -157,8 +157,8 @@ gmake distclean || exit $?
 sh ./configure --enable-debug=no --enable-mpi=yes --enable-sse=yes --enable-threads=no --without-beagle --prefix=$PREFIX || exit $?
 gmake -j4 || exit $?
 cp mrbayes5d $PREFIX/bin/mrbayes5d-mpi || exit $?
-cd ../.. || exit $?
-rm -rf mrbayes5d-3.2.6.2016.11.02.zip mrbayes5d-3.2.6.2016.11.02 || exit $?
+cd .. || exit $?
+rm -rf mrbayes5d-3.2.6.2016.11.11.zip mrbayes5d-3.2.6.2016.11.11 || exit $?
 touch .mrbayes5d || exit $?
 fi
 # download, and install FigTree
@@ -179,9 +179,11 @@ touch .figtree || exit $?
 fi
 # download, and install Tracer
 if ! test -e .tracer; then
-wget -c https://github.com/beast-dev/tracer/releases/download/v1.7.1/Tracer_v1.7.1.tgz || exit $?
-gtar -xzf Tracer_v1.7.1.tgz || exit $?
-cd Tracer_v1.7.1/lib || exit $?
+wget -c https://github.com/beast-dev/tracer/releases/download/v1.7.2/Tracer_v1.7.2.tgz || exit $?
+mkdir -p Tracer_v1.7.2 || exit $?
+cd Tracer_v1.7.2 || exit $?
+gtar -xzf ../Tracer_v1.7.2.tgz || exit $?
+cd lib || exit $?
 mkdir -p $PREFIX/share/tracer || exit $?
 mv *.jar $PREFIX/share/tracer/ || exit $?
 cd ../bin || exit $?
@@ -191,7 +193,7 @@ echo "$PREFIX/share/molphypack/bin/java -Xms64m -Xmx8192m -jar $PREFIX/share/tra
 chmod 755 tracer || exit $?
 mv tracer $PREFIX/bin/ || exit $?
 cd ../.. || exit $?
-rm -rf Tracer_v1.7.1.tgz Tracer_v1.7.1 || exit $?
+rm -rf Tracer_v1.7.2.tgz Tracer_v1.7.2 || exit $?
 touch .tracer || exit $?
 fi
 # download, compile, and install Kakusan4
