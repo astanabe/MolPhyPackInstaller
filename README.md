@@ -4,8 +4,6 @@ Automatic installer shell scripts for molecular phylogenetic analyses.
 
 ## Prerequisites
 
-## Prerequisites
-
 On Debian GNU/Linux compatible distributions, Debian 11 Bullseye, Ubuntu 20.04LTS or Linux Mint 20 or later is required.
 
 On Red Hat Enterprise Linux compatible distributions, Red Hat Enterprise Linux 8, CentOS 8, AlmaLinux 8 or Rocky Linux 8 is required.
