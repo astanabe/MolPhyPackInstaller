@@ -4,15 +4,18 @@ Automatic installer shell scripts for molecular phylogenetic analyses.
 
 ## Prerequisites
 
+## Prerequisites
+
 On Debian GNU/Linux compatible distributions, Debian 11 Bullseye, Ubuntu 20.04LTS or Linux Mint 20 or later is required.
 
-On Red Hat Enterprise Linux compatible distributions, Red Hat Enterprise Linux 8 or CentOS 8 is required.
-Red Hat Enterprise Linux users need to enable CodeReady Linux Builder repository before installing Claident.
-CentOS users need to enable PowerTools repository before installing Claident.
+On Red Hat Enterprise Linux compatible distributions, Red Hat Enterprise Linux 8, CentOS 8, AlmaLinux 8 or Rocky Linux 8 is required.
+Those users need to enable Extra Packages for Enterprise Linux (EPEL) repository before installation.
+Red Hat Enterprise Linux users also need to enable CodeReady Linux Builder repository.
+CentOS, AlmaLinux or Rocky Linux users need to enable PowerTools repository.
 
 On macOS, macOS 10.14 Mojave or later is required.
-Mac users need to install Xcode command line tools before installing Claident.
-Xcode command line tools can install by running the following command in the terminal.
+Mac users need to install Xcode command line tools before installation.
+Xcode command line tools can be installed by running the following command in the terminal.
 
 ```
 xcode-select --install
