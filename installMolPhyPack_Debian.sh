@@ -2,13 +2,13 @@ sudo apt-get install gcc g++ make wget tar gzip bzip2 xz-utils unzip coreutils p
 if test -z $PREFIX; then
 export PREFIX=/usr/local || exit $?
 fi
-# download and install JRE8
+# download and install JRE11
 if ! test -e .java; then
-wget -c https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jre_x64_linux_hotspot_8u345b01.tar.gz || exit $?
-tar -xzf OpenJDK8U-jre_x64_linux_hotspot_8u345b01.tar.gz || exit $?
+wget -c https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.20.1%2B1/OpenJDK11U-jre_x64_linux_hotspot_11.0.20.1_1.tar.gz || exit $?
+tar -xzf OpenJDK11U-jre_x64_linux_hotspot_11.0.20.1_1.tar.gz || exit $?
 mkdir -p $PREFIX/share/molphypack || sudo mkdir -p $PREFIX/share/molphypack || exit $?
-mv jdk8u345-b01-jre/* $PREFIX/share/molphypack/ || sudo mv jdk8u345-b01-jre/* $PREFIX/share/molphypack/ || exit $?
-rm -rf jdk8u345-b01-jre OpenJDK8U-jre_x64_linux_hotspot_8u345b01.tar.gz || exit $?
+mv jdk-11.0.20.1+1-jre/* $PREFIX/share/molphypack/ || sudo mv jdk-11.0.20.1+1-jre/* $PREFIX/share/molphypack/ || exit $?
+rm -rf jdk-11.0.20.1+1-jre OpenJDK11U-jre_x64_linux_hotspot_11.0.20.1_1.tar.gz || exit $?
 touch .java || exit $?
 fi
 # download , compile, and install Perl modules

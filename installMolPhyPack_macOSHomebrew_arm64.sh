@@ -2,13 +2,13 @@ brew install make wget unzip gnu-tar xz zlib bzip2 autoconf automake coreutils n
 if test -z $PREFIX; then
 export PREFIX=/usr/local || exit $?
 fi
-# download and install JRE8
+# download and install JRE11
 if ! test -e .java; then
-wget -c https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jre_x64_mac_hotspot_8u345b01.tar.gz || exit $?
-tar -xzf OpenJDK8U-jre_x64_mac_hotspot_8u345b01.tar.gz || exit $?
+wget -c https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.20.1%2B1/OpenJDK11U-jre_aarch64_mac_hotspot_11.0.20.1_1.tar.gz || exit $?
+tar -xzf OpenJDK11U-jre_aarch64_mac_hotspot_11.0.20.1_1.tar.gz || exit $?
 mkdir -p $PREFIX/share/molphypack || exit $?
-mv jdk8u345-b01-jre/Contents/Home/* $PREFIX/share/molphypack/ || exit $?
-rm -rf jdk8u345-b01-jre OpenJDK8U-jre_x64_mac_hotspot_8u345b01.tar.gz || exit $?
+mv jdk-11.0.20.1+1-jre/Contents/Home/* $PREFIX/share/molphypack/ || exit $?
+rm -rf jdk-11.0.20.1+1-jre OpenJDK11U-jre_aarch64_mac_hotspot_11.0.20.1_1.tar.gz || exit $?
 touch .java || exit $?
 fi
 # download , compile, and install Perl modules
@@ -84,37 +84,13 @@ if ! test -e .raxml; then
 wget -c -O RAxML-8.2.12.tar.gz https://github.com/stamatak/standard-RAxML/archive/refs/tags/v8.2.12.tar.gz || exit $?
 gtar -xzf RAxML-8.2.12.tar.gz || exit $?
 cd standard-RAxML-8.2.12 || exit $?
-for f in Makefile.*; do perl -i -npe 's/^CFLAGS *= */$& -march=core2 /;s/ -march=native//' $f || exit $?; done
-perl -i -npe "s/-march=core2/-march=corei7-avx/" Makefile.AVX.gcc || exit $?
-perl -i -npe "s/-march=core2/-march=corei7-avx/" Makefile.AVX.PTHREADS.gcc || exit $?
-perl -i -npe "s/-march=core2/-march=core-avx2/" Makefile.AVX2.gcc || exit $?
-perl -i -npe "s/-march=core2/-march=core-avx2/" Makefile.AVX2.PTHREADS.gcc || exit $?
-perl -i -npe "s/-D_FMA/$& -mfma/" Makefile.AVX2.gcc || exit $?
-perl -i -npe "s/-D_FMA/$& -mfma/" Makefile.AVX2.PTHREADS.gcc || exit $?
+for f in Makefile.*; do perl -i -npe 's/^ -msse//' $f || exit $?; done
 gmake -j4 -f Makefile.gcc || exit $?
 mv raxmlHPC $PREFIX/bin/ || exit $?
 gmake -f Makefile.gcc clean || exit $?
 gmake -j4 -f Makefile.PTHREADS.gcc || exit $?
 mv raxmlHPC-PTHREADS $PREFIX/bin/ || exit $?
 gmake -f Makefile.PTHREADS.gcc clean || exit $?
-gmake -j4 -f Makefile.AVX.gcc || exit $?
-mv raxmlHPC-AVX $PREFIX/bin/ || exit $?
-gmake -f Makefile.AVX.gcc clean || exit $?
-gmake -j4 -f Makefile.AVX.PTHREADS.gcc || exit $?
-mv raxmlHPC-PTHREADS-AVX $PREFIX/bin/ || exit $?
-gmake -f Makefile.AVX.PTHREADS.gcc clean || exit $?
-gmake -j4 -f Makefile.AVX2.gcc || exit $?
-mv raxmlHPC-AVX2 $PREFIX/bin/ || exit $?
-gmake -f Makefile.AVX2.gcc clean || exit $?
-gmake -j4 -f Makefile.AVX2.PTHREADS.gcc || exit $?
-mv raxmlHPC-PTHREADS-AVX2 $PREFIX/bin/ || exit $?
-gmake -f Makefile.AVX2.PTHREADS.gcc clean || exit $?
-gmake -j4 -f Makefile.SSE3.gcc || exit $?
-mv raxmlHPC-SSE3 $PREFIX/bin/ || exit $?
-gmake -f Makefile.SSE3.gcc clean || exit $?
-gmake -j4 -f Makefile.SSE3.PTHREADS.gcc || exit $?
-mv raxmlHPC-PTHREADS-SSE3 $PREFIX/bin/ || exit $?
-gmake -f Makefile.SSE3.PTHREADS.gcc clean || exit $?
 cd .. || exit $?
 rm -rf RAxML-8.2.12.tar.gz standard-RAxML-8.2.12 || exit $?
 touch .raxml || exit $?
