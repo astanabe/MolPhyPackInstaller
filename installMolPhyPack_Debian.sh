@@ -46,7 +46,7 @@ if ! test -e .phylip; then
 wget -c http://evolution.gs.washington.edu/phylip/download/phylip-3.697.tar.gz || exit $?
 tar -xzf phylip-3.697.tar.gz || exit $?
 cd phylip-3.697/src || exit $?
-perl -i -npe 's/^CFLAGS *= */$& -O3 -mtune=native /' Makefile.unx || exit $?
+perl -i -npe 's/^CFLAGS *= */$& -O3 -mtune=native -fcommon /' Makefile.unx || exit $?
 make -j4 -f Makefile.unx all || exit $?
 make -f Makefile.unx install || exit $?
 cd ../exe || exit $?
