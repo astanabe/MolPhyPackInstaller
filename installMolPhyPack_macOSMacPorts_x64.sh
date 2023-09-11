@@ -151,10 +151,12 @@ wget -c https://www.fifthdimension.jp/products/mrbayes5d/mrbayes5d-3.2.6.2016.11
 unzip -qq mrbayes5d-3.2.6.2016.11.11.zip || exit $?
 cd mrbayes5d-3.2.6.2016.11.11 || exit $?
 sh ./configure --enable-debug=no --enable-mpi=no --enable-sse=yes --enable-threads=no --without-beagle --prefix=$PREFIX || exit $?
+perl -i -npe 's/^CFLAGS *= */$& -O3 -mtune=native -fcommon /' Makefile || exit $?
 gmake -j4 || exit $?
 gmake install || sudo gmake install || exit $?
 gmake distclean || exit $?
 mpicc=mpicc-openmpi-mp sh ./configure --enable-debug=no --enable-mpi=yes --enable-sse=yes --enable-threads=no --without-beagle --prefix=$PREFIX || exit $?
+perl -i -npe 's/^CFLAGS *= */$& -O3 -mtune=native -fcommon /' Makefile || exit $?
 gmake CC=mpicc-openmpi-mp -j4 || exit $?
 cp mrbayes5d $PREFIX/bin/mrbayes5d-mpi || sudo cp mrbayes5d $PREFIX/bin/mrbayes5d-mpi || exit $?
 cd .. || exit $?
@@ -201,7 +203,7 @@ if ! test -e .kakusan4; then
 wget -c https://www.fifthdimension.jp/products/kakusan/kakusan4-4.0.2016.11.07.zip || exit $?
 unzip -qq kakusan4-4.0.2016.11.07.zip || exit $?
 cd kakusan4-4.0.2016.11.07 || exit $?
-perl -i -npe 's/^CFLAGS *= */$&-mtune=native /;s/ -frerun-loop-opt//;s/ -static-libgcc//' Makefile.UNIX || exit $?
+perl -i -npe 's/^CFLAGS *= */$&-mtune=native -fcommon /;s/ -frerun-loop-opt//;s/ -static-libgcc//' Makefile.UNIX || exit $?
 gmake -j4 -f Makefile.UNIX || exit $?
 mkdir -p $PREFIX/share/kakusan4 || sudo mkdir -p $PREFIX/share/kakusan4 || exit $?
 mv kakusan4.pl baseml $PREFIX/share/kakusan4/ || sudo mv kakusan4.pl baseml $PREFIX/share/kakusan4/ || exit $?
@@ -218,7 +220,7 @@ if ! test -e .aminosan; then
 wget -c https://www.fifthdimension.jp/products/aminosan/aminosan-1.0.2016.11.07.zip || exit $?
 unzip -qq aminosan-1.0.2016.11.07.zip || exit $?
 cd aminosan-1.0.2016.11.07 || exit $?
-perl -i -npe 's/^CFLAGS *= */$&-mtune=native /;s/ -frerun-loop-opt//;s/ -static-libgcc//' Makefile.UNIX || exit $?
+perl -i -npe 's/^CFLAGS *= */$&-mtune=native -fcommon /;s/ -frerun-loop-opt//;s/ -static-libgcc//' Makefile.UNIX || exit $?
 gmake -j4 -f Makefile.UNIX || exit $?
 mkdir -p $PREFIX/share/aminosan || sudo mkdir -p $PREFIX/share/aminosan || exit $?
 mv aminosan.pl codeml $PREFIX/share/aminosan/ || sudo mv aminosan.pl codeml $PREFIX/share/aminosan/ || exit $?
